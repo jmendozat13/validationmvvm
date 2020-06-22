@@ -1,7 +1,6 @@
 package com.example.validationmvvm.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.validationmvvm.R
 import com.example.validationmvvm.databinding.RegisteruserFragmentBinding
-import com.google.android.material.snackbar.Snackbar
 
 
 class RegisterUserFragment : Fragment() {
@@ -21,12 +19,14 @@ class RegisterUserFragment : Fragment() {
     }
 
     private lateinit var viewModel: RegisterUserViewModel
+    private lateinit var binding: RegisteruserFragmentBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this).get(RegisterUserViewModel::class.java)
-        val binding: RegisteruserFragmentBinding =
+        binding =
             DataBindingUtil.inflate(inflater, R.layout.registeruser_fragment, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
@@ -39,8 +39,20 @@ class RegisterUserFragment : Fragment() {
     }
 
     private fun initObserver() {
-        viewModel.errorMessage.observe(viewLifecycleOwner, Observer { message ->
-            Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
+        viewModel.firstNameErrorMessage.observe(viewLifecycleOwner, Observer { message ->
+            binding.edtFirstName.error = message
+        })
+
+        viewModel.lastNameErrorMessage.observe(viewLifecycleOwner, Observer { message ->
+            binding.edtLastName.error = message
+        })
+
+        viewModel.emailErrorMessage.observe(viewLifecycleOwner, Observer { message ->
+            binding.edtEmail.error = message
+        })
+
+        viewModel.mobileErrorMessage.observe(viewLifecycleOwner, Observer { message ->
+            binding.edtMobile.error = message
         })
     }
 
