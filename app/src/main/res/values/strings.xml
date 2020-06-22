@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ValidationMVVM</string>
+    <string name="firstname">First name</string>
+    <string name="lasttname">Last name</string>
+    <string name="email">Email</string>
+    <string name="mobile">Mobile</string>
+    <string name="save">Save</string>
+</resources>
