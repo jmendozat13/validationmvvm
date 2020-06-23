@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.validationmvvm.R
 import com.example.validationmvvm.databinding.RegisteruserFragmentBinding
+import com.google.android.material.snackbar.Snackbar
 
 
 class RegisterUserFragment : Fragment() {
@@ -39,20 +40,8 @@ class RegisterUserFragment : Fragment() {
     }
 
     private fun initObserver() {
-        viewModel.firstNameErrorMessage.observe(viewLifecycleOwner, Observer { message ->
-            binding.edtFirstName.error = message
-        })
-
-        viewModel.lastNameErrorMessage.observe(viewLifecycleOwner, Observer { message ->
-            binding.edtLastName.error = message
-        })
-
-        viewModel.emailErrorMessage.observe(viewLifecycleOwner, Observer { message ->
-            binding.edtEmail.error = message
-        })
-
-        viewModel.mobileErrorMessage.observe(viewLifecycleOwner, Observer { message ->
-            binding.edtMobile.error = message
+        viewModel.alertMessage.observe(viewLifecycleOwner, Observer { message ->
+            Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
         })
     }
 
