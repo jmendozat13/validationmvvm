@@ -7,12 +7,15 @@ import com.example.validationmvvm.utils.ValidatorException
 
 object RegisterValidator : Validator {
     fun validateFirstName(firstName: String?): Boolean? {
-        if (firstName.isNullOrEmpty()) throw ValidatorException(ValidateRegisterError.EMPTY_FIRST_NAME)
+        val fname = firstName?.trim()?:""
+        if (fname.isNullOrEmpty()) throw ValidatorException(ValidateRegisterError.EMPTY_FIRST_NAME)
+
         return true
     }
 
     fun validateLastName(lastName: String?): Boolean? {
-        if (lastName.isNullOrEmpty()) throw ValidatorException(ValidateRegisterError.EMPTY_LAST_NAME)
+        val lname = lastName?.trim()?:""
+        if (lname.isNullOrEmpty()) throw ValidatorException(ValidateRegisterError.EMPTY_LAST_NAME)
         return true
     }
 
