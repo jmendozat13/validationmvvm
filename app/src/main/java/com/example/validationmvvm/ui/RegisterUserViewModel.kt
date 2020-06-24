@@ -5,7 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import com.example.validationmvvm.utils.addSources
+import com.example.validationmvvm.extensions.addSources
 
 class RegisterUserViewModel : ViewModel() {
     var firstName = MutableLiveData<String>()

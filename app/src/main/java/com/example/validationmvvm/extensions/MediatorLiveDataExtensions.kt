@@ -1,4 +1,4 @@
-package com.example.validationmvvm.utils
+package com.example.validationmvvm.extensions
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
