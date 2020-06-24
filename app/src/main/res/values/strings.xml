@@ -5,4 +5,11 @@
     <string name="email">Email</string>
     <string name="mobile">Mobile</string>
     <string name="save">Save</string>
+
+    <string name="error_email_invalid">Email is invalid.</string>
+    <string name="error_mobile_no_invalid">Mobile is invalid.</string>
+    <string name="error_first_name_empty">First name is required.</string>
+    <string name="error_last_name_empty">Last name is required.</string>
+    <string name="error_email_empty">Email is required.</string>
+    <string name="error_mobile_no_empty">Mobile is required.</string>
 </resources>

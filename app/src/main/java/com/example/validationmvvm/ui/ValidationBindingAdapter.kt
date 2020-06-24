@@ -1,60 +1,84 @@
 package com.example.validationmvvm.ui
 
-import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
-import com.example.validationmvvm.extensions.isValidEmail
+import com.example.validationmvvm.utils.ValidateEditText
+import com.example.validationmvvm.utils.ValidatorException
 
 @BindingAdapter(value = ["validateFirstName", "validateStatusAttrChanged"], requireAll = false)
-fun validateFirstName(editText: EditText, firstName: String?, attrChange: InverseBindingListener?) {
-    if(firstName.isNullOrEmpty()) {
-        editText.error = "FirstName is required"
-    }else {
-        editText.error = null
+fun validateFirstName(
+    editText: ValidateEditText,
+    firstName: String?,
+    attrChange: InverseBindingListener?) {
+    editText.doValidation(firstName, attrChange, 1000) {
+        RegisterValidator.validateFirstName(it)
     }
-    attrChange?.onChange()
 }
 
 @BindingAdapter(value = ["validateLastName", "validateStatusAttrChanged"], requireAll = false)
-fun validateLastName(editText: EditText, lastName: String?, attrChange: InverseBindingListener?) {
-    if(lastName.isNullOrEmpty()) {
-        editText.error = "LastName is required"
-    }else {
-        editText.error = null
+fun validateLastName(
+    editText: ValidateEditText,
+    lastName: String?,
+    attrChange: InverseBindingListener?) {
+    editText.doValidation(lastName, attrChange, 1000) {
+        RegisterValidator.validateLastName(it)
     }
-    attrChange?.onChange()
 }
 
 @BindingAdapter(value = ["validateEmail", "validateStatusAttrChanged"], requireAll = false)
-fun validateEmail(editText: EditText, email: String?, attrChange: InverseBindingListener?) {
-    when {
-        email.isNullOrEmpty() -> {
-            editText.error = "Email is required."
-        }
-        !email.isValidEmail() -> {
-            editText.error = "Email is invalid."
-        }
-        else -> {
-            editText.error = null
-        }
+fun validateEmail(
+    editText: ValidateEditText,
+    email: String?,
+    attrChange: InverseBindingListener?
+) {
+    editText.doValidation(email, attrChange, 1000) {
+        RegisterValidator.validateEmail(it)
     }
-    attrChange?.onChange()
 }
 
 @BindingAdapter(value = ["validateMobile", "validateStatusAttrChanged"], requireAll = false)
-fun validateMobile(editText: EditText, mobile: String?, attrChange: InverseBindingListener?) {
-    if(mobile.isNullOrEmpty()) {
-        editText.error = "Mobile number is required"
-    }else {
-        editText.error = null
+fun validateMobile(
+    editText: ValidateEditText,
+    mobile: String?,
+    attrChange: InverseBindingListener?) {
+    editText.doValidation(mobile, attrChange, 1000) {
+        RegisterValidator.validateMobileNo(it)
     }
-    attrChange?.onChange()
 }
 
 
 @InverseBindingAdapter(attribute = "validateStatus")
-fun getValidateStatus(view: EditText): Boolean = view.error?.isEmpty() ?: true
+fun getValidateStatus(view: ValidateEditText): Boolean = view.isValid ?: false
 
 @BindingAdapter("validateStatus")
-fun setValidateStatus(view: EditText, value: Boolean) {}
+fun setValidateStatus(view: ValidateEditText, value: Boolean) {}
+
+
+private fun <T> ValidateEditText.doValidation(
+    value: T?,
+    attrChange: InverseBindingListener?,
+    delay: Long,
+    validation: (T) -> Boolean?
+) {
+    // set a result to invalid when an input is changing
+    isValid = false
+    attrChange?.onChange()
+
+    value?.let {
+        validateHandler?.apply {
+            removeCallbacksAndMessages(null)
+        }?.postDelayed({
+            try {
+                validation(it)?.let { result -> // throw ValidatorException if result is invalid
+                    isValid = result
+                }
+            } catch (ve: ValidatorException) {
+                error = ve.error.getAlertMessage(context)
+                isValid = false
+            } finally {
+                attrChange?.onChange()
+            }
+        }, delay)
+    }
+}
