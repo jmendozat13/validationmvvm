@@ -1,15 +1,16 @@
 package com.example.validationmvvm.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.validationmvvm.R
 import com.example.validationmvvm.databinding.RegisteruserFragmentBinding
+import com.example.validationmvvm.extensions.setOnClickDelay
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -40,8 +41,13 @@ class RegisterUserFragment : Fragment() {
     }
 
     private fun initObserver() {
-        viewModel.alertMessage.observe(viewLifecycleOwner, Observer { message ->
+        viewModel.alertMessage.observe(viewLifecycleOwner, { message ->
             Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
+        })
+
+        binding.btnSave.setOnClickDelay(viewLifecycleOwner, {
+            Log.d("RegisterUserFragment", "END")
+            viewModel.acceptForm()
         })
     }
 

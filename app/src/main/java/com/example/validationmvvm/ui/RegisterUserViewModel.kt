@@ -3,7 +3,6 @@ package com.example.validationmvvm.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.example.validationmvvm.extensions.addSources
 
@@ -19,7 +18,7 @@ class RegisterUserViewModel : ViewModel() {
     var isValidMobile = MutableLiveData<Boolean>()
 
     val isValidForm = MediatorLiveData<Boolean>().apply {
-        addSources(Observer<Boolean> {
+        addSources({
             value = validateForm()
         }, isValidFirstName, isValidLastName, isValidEmail, isValidMobile)
     }
